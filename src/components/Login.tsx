@@ -48,17 +48,17 @@ const Login = () => {
 
       if (res.data.success) {
         const userData: userState = {
-          id: res.data.data._id,
-          phone: res.data.data.phone,
-          package: res.data.data.package,
-          depositeAmount: res.data.data.depositeAmount,
-          referralUsedCount: res.data.data.referralUsedCount,
-          totalAmount: res.data.data.totalAmount,
-          referralCode: res.data.data.referralCode,
-          referralEarned: res.data.data.referralEarned,
-          dailyIncome: res.data.data.dailyIncome,
-          compoundDays: res.data.data.compoundDays,
-          role: res.data.data.role,
+          id: res.data.data.user._id,
+          phone: res.data.data.user.phone,
+          package: res.data.data.user.package,
+          depositeAmount: res.data.data.user.depositeAmount,
+          referralUsedCount: res.data.data.user.referralUsedCount,
+          totalAmount: res.data.data.user.totalAmount,
+          referralCode: res.data.data.user.referralCode,
+          referralEarned: res.data.data.user.referralEarned,
+          dailyIncome: res.data.data.user.dailyIncome,
+          compoundDays: res.data.data.user.compoundDays,
+          role: res.data.data.user.role,
         };
         dispatch(addUser(userData));
          
