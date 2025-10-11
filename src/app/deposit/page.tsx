@@ -65,11 +65,15 @@ const Page: React.FC = () => {
       formData.append("userId", user?.id);
 
       axios.defaults.withCredentials = true;
+      const token = localStorage.getItem("token");
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/deposit-balance`,
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -95,7 +99,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#0e0e0e] text-white flex flex-col items-center justify-start p-4 md:p-10 gap-6 mb-14">
-       <ParticlesBackground/>
+      <ParticlesBackground />
       {/* Error Message */}
       {errorMsg && (
         <motion.div
@@ -181,7 +185,8 @@ const Page: React.FC = () => {
         onClick={() => window.open(currentQR.src, "_blank")}
         className="w-full z-2 md:w-[40%] bg-red-600 hover:bg-red-700 transition-all py-3 rounded-xl flex items-center justify-center gap-2 font-semibold text-white shadow"
       >
-        <Download size={20} /> Download {qrType === "wallet" ? "Wallet" : "Bank"} QR
+        <Download size={20} /> Download{" "}
+        {qrType === "wallet" ? "Wallet" : "Bank"} QR
       </motion.button>
 
       {/* Coin Input & Screenshot Upload */}

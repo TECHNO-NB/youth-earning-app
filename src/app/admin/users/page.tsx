@@ -28,8 +28,17 @@ const AdminUsersPage = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/get-allusers`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/get-allusers`,
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ auth token
+          },
+          withCredentials: true, // ✅ include cookies if needed
+        }
       );
       setUsers(data.data);
     } catch (err: any) {
@@ -48,14 +57,25 @@ const AdminUsersPage = () => {
     if (!roleChangeUser) return;
 
     try {
+      const token = localStorage.getItem("token");
+
       const updatedRole = roleChangeUser.role === "user" ? "admin" : "user";
       await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/change-role/${roleChangeUser._id}`,
-        { role: updatedRole }
+        { role: updatedRole },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ auth token
+          },
+          withCredentials: true, // ✅ include cookies if needed
+        }
       );
       setUsers((prev) =>
         prev.map((user) =>
-          user._id === roleChangeUser._id ? { ...user, role: updatedRole } : user
+          user._id === roleChangeUser._id
+            ? { ...user, role: updatedRole }
+            : user
         )
       );
       setRoleChangeUser(null);
@@ -81,7 +101,7 @@ const AdminUsersPage = () => {
 
   return (
     <div className="p-6 bg-gray-950 min-h-screen text-gray-100 mt-12">
-      <ParticlesBackground/>
+      <ParticlesBackground />
       <h1 className="text-3xl z-2 font-bold mb-6 text-white">All Users</h1>
 
       {/* Table */}
@@ -122,10 +142,18 @@ const AdminUsersPage = () => {
               users.map((user) => (
                 <tr key={user._id} className="text-center hover:bg-gray-800">
                   <td className="p-2 border border-gray-700">{user.phone}</td>
-                  <td className="p-2 border border-gray-700">{user.referralCode}</td>
-                  <td className="p-2 border border-gray-700">{user.referralUsedCount}</td>
-                  <td className="p-2 border border-gray-700">{user.totalAmount}</td>
-                  <td className="p-2 border border-gray-700">{user.depositeAmount}</td>
+                  <td className="p-2 border border-gray-700">
+                    {user.referralCode}
+                  </td>
+                  <td className="p-2 border border-gray-700">
+                    {user.referralUsedCount}
+                  </td>
+                  <td className="p-2 border border-gray-700">
+                    {user.totalAmount}
+                  </td>
+                  <td className="p-2 border border-gray-700">
+                    {user.depositeAmount}
+                  </td>
                   <td className="p-2 border border-gray-700">
                     <button
                       className={`px-2 py-1 rounded text-white ${
@@ -160,7 +188,8 @@ const AdminUsersPage = () => {
           <div className="bg-gray-800 p-6 rounded-xl shadow-lg text-white w-80 border border-gray-700">
             <h2 className="text-lg font-bold mb-4">Delete User?</h2>
             <p className="mb-4 text-gray-300">
-              Are you sure you want to delete this user? This action cannot be undone.
+              Are you sure you want to delete this user? This action cannot be
+              undone.
             </p>
             <div className="flex justify-end gap-2">
               <button
@@ -186,9 +215,13 @@ const AdminUsersPage = () => {
           <div className="bg-gray-800 p-6 rounded-xl shadow-lg text-white w-80 border border-gray-700">
             <h2 className="text-lg font-bold mb-4">Change Role?</h2>
             <p className="mb-4 text-gray-300">
-              Are you sure you want to change <span className="font-bold">{roleChangeUser.phone}</span>’s role from{" "}
-              <span className="font-bold">{roleChangeUser.role}</span> to{" "}
-              <span className="font-bold">{roleChangeUser.role === "user" ? "admin" : "user"}</span>?
+              Are you sure you want to change{" "}
+              <span className="font-bold">{roleChangeUser.phone}</span>’s role
+              from <span className="font-bold">{roleChangeUser.role}</span> to{" "}
+              <span className="font-bold">
+                {roleChangeUser.role === "user" ? "admin" : "user"}
+              </span>
+              ?
             </p>
             <div className="flex justify-end gap-2">
               <button

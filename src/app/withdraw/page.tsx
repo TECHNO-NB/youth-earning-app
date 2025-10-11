@@ -58,11 +58,17 @@ const RedeemPage = () => {
       formData.append("qrScreenshot", qrScreenshot);
       formData.append("amount", amount.toString());
 
+      const token = localStorage.getItem("token");
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/withdraw`,
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            "Content-Type": "multipart/form-data",
+
+            Authorization: `Bearer ${token}`, // ✅ auth token
+          },
+
           withCredentials: true,
         }
       );
@@ -91,7 +97,7 @@ const RedeemPage = () => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-4 py-10">
       {/* Title */}
-      <ParticlesBackground/>
+      <ParticlesBackground />
       <div className="mb-8 z-2 text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-blue-500">
           Withdraw Your Amount
@@ -103,8 +109,8 @@ const RedeemPage = () => {
         <div className="flex relative z-2 items-center justify-center gap-2 mt-3 bg-red-900/20 border border-red-700 px-3 py-2 rounded-lg w-fit mx-auto">
           <TriangleAlert className="text-red-500" size={20} />
           <p className="text-red-400 text-sm z-2 font-medium">
-            Make sure the amount is not less than Rs 500 and not greater than
-            Rs 33,000
+            Make sure the amount is not less than Rs 500 and not greater than Rs
+            33,000
           </p>
         </div>
       </div>
@@ -150,7 +156,7 @@ const RedeemPage = () => {
         {/* Amount Input */}
         <div className="relative w-full">
           <p className="absolute -top-3 bg-zinc-900 left-4 px-2 rounded-xl text-sm text-gray-400">
-             Amount
+            Amount
           </p>
           <input
             onChange={(e) => setAmount(Number(e.target.value))}

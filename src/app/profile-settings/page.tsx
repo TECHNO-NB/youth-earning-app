@@ -51,10 +51,17 @@ const ProfileSettings: React.FC = () => {
   const handleSave = async () => {
     try {
       axios.defaults.withCredentials = true;
+      const token=localStorage.getItem("token")
       const res = await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/update-profile`,
         formData,
-        { withCredentials: true }
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`, // ✅ auth token
+            },
+            withCredentials: true, // ✅ include cookies if needed
+          }
       );
 
       if (res.data.success) {

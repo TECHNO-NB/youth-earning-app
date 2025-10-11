@@ -10,12 +10,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Trash2, Upload, Video, PlusCircle, Loader2 } from "lucide-react";
 import axios from "axios";
@@ -46,7 +41,17 @@ const Page = () => {
   // Fetch all videos
   const fetchVideos = async () => {
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/get-video`);
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/get-video`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ auth token
+          },
+          withCredentials: true, // ✅ include cookies if needed
+        }
+      );
       setVideos(res.data);
     } catch (error) {
       console.error("Error fetching videos:", error);
@@ -59,7 +64,8 @@ const Page = () => {
 
   // Add new video
   const handleAddVideo = async () => {
-    if (!form.title || !form.videoFile || !form.thumbnailFile) return alert("All fields required!");
+    if (!form.title || !form.videoFile || !form.thumbnailFile)
+      return alert("All fields required!");
 
     const data = new FormData();
     data.append("title", form.title);
@@ -70,11 +76,26 @@ const Page = () => {
 
     try {
       setLoading(true);
-      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/videos/add-video`, data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/videos/add-video`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
       await fetchVideos();
-      setForm({ title: "", description: "", reward: "", videoFile: null, thumbnailFile: null });
+      setForm({
+        title: "",
+        description: "",
+        reward: "",
+        videoFile: null,
+        thumbnailFile: null,
+      });
       setIsDialogOpen(false);
     } catch (error) {
       console.error("Error uploading video:", error);
@@ -88,7 +109,17 @@ const Page = () => {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this video?")) return;
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/videos/delete-video/${id}`);
+      const token = localStorage.getItem("token");
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/videos/delete-video/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ auth token
+          },
+          withCredentials: true, // ✅ include cookies if needed
+        }
+      );
       setVideos(videos.filter((v) => v._id !== id));
     } catch (error) {
       console.error("Error deleting video:", error);
@@ -98,7 +129,7 @@ const Page = () => {
   return (
     <div className="p-6 bg-gradient-to-br from-gray-950 to-gray-900 min-h-screen text-white mt-14 md:mt-0 mb-14">
       {/* Header */}
-      <ParticlesBackground/>
+      <ParticlesBackground />
       <div className="flex justify-between items-center mb-6 z-4">
         <h1 className="text-2xl font-bold flex items-center gap-2 z-4">
           <Video className="text-blue-400" /> Video Management
@@ -114,7 +145,9 @@ const Page = () => {
       {/* Video Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 z-4">
         {videos.length === 0 ? (
-          <p className="text-gray-400 text-center col-span-full z-4">No videos uploaded yet.</p>
+          <p className="text-gray-400 text-center col-span-full z-4">
+            No videos uploaded yet.
+          </p>
         ) : (
           videos.map((video) => (
             <Card
@@ -131,9 +164,12 @@ const Page = () => {
                 />
               </CardHeader>
               <CardContent className="p-4">
-                <CardTitle className="text-lg font-semibold mb-1">{video.title}</CardTitle>
+                <CardTitle className="text-lg font-semibold mb-1">
+                  {video.title}
+                </CardTitle>
                 <p className="text-sm text-gray-400 mb-2">
-                  Earning: <span className="text-green-400">Rs. {video.reward}</span>
+                  Earning:{" "}
+                  <span className="text-green-400">Rs. {video.reward}</span>
                 </p>
                 <a
                   href={video.url}
@@ -183,7 +219,9 @@ const Page = () => {
               <label className="text-sm font-medium">Description</label>
               <Input
                 value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, description: e.target.value })
+                }
                 className="bg-gray-800 border-gray-700 text-white mt-1"
                 placeholder="Enter description"
               />
@@ -205,7 +243,12 @@ const Page = () => {
               <Input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setForm({ ...form, thumbnailFile: e.target.files?.[0] || null })}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    thumbnailFile: e.target.files?.[0] || null,
+                  })
+                }
                 className="bg-gray-800 border-gray-700 text-white mt-1"
               />
             </div>
@@ -215,7 +258,9 @@ const Page = () => {
               <Input
                 type="file"
                 accept="video/*"
-                onChange={(e) => setForm({ ...form, videoFile: e.target.files?.[0] || null })}
+                onChange={(e) =>
+                  setForm({ ...form, videoFile: e.target.files?.[0] || null })
+                }
                 className="bg-gray-800 border-gray-700 text-white mt-1"
               />
             </div>
@@ -227,7 +272,11 @@ const Page = () => {
               disabled={loading}
               className="bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2"
             >
-              {loading ? <Loader2 className="animate-spin" /> : <Upload size={18} />}
+              {loading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <Upload size={18} />
+              )}
               {loading ? "Uploading..." : "Add Video"}
             </Button>
           </DialogFooter>

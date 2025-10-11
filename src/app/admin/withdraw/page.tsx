@@ -14,13 +14,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import {
-  Loader2,
-  Eye,
-  Download,
-  CheckCircle2,
-  XCircle,
-} from "lucide-react";
+import { Loader2, Eye, Download, CheckCircle2, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import ParticlesBackground from "@/components/Background";
 
@@ -48,9 +42,17 @@ const WithdrawAdminPage = () => {
   const fetchWithdraws = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem("token");
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/get-withdraw`,
-        { withCredentials: true }
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ auth token
+          },
+          withCredentials: true, // ✅ include cookies if needed
+        }
       );
       setWithdraws(res.data.withdraws || []);
     } catch (error) {
@@ -65,16 +67,24 @@ const WithdrawAdminPage = () => {
   }, []);
 
   const handleStatusUpdate = async () => {
-    if (!selected || !statusToUpdate) return toast.error("Select status first!");
+    if (!selected || !statusToUpdate)
+      return toast.error("Select status first!");
     try {
       setIsUpdating(true);
+      const token = localStorage.getItem("token");
       const res = await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/update-withdraw-status`,
         {
           withdrawId: selected._id,
           status: statusToUpdate,
         },
-        { withCredentials: true }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ auth token
+          },
+          withCredentials: true, // ✅ include cookies if needed
+        }
       );
       toast.success(res.data.message);
       setSelected(null);
@@ -100,7 +110,7 @@ const WithdrawAdminPage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white p-6 mt-12">
-    <ParticlesBackground/>
+      <ParticlesBackground />
       <h1 className="text-3xl  z-4 font-bold text-blue-500 mb-6">
         Withdraw Management
       </h1>

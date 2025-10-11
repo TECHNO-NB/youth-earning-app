@@ -38,6 +38,7 @@ export default function WatchVideoClient() {
   const handleVideoEnd = async () => {
     if (!video) return;
     try {
+      const token = localStorage.getItem("token");
       await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/update-daily-task-completed`,
         {
@@ -45,7 +46,13 @@ export default function WatchVideoClient() {
           reward: video.reward,
           userId,
         },
-        { withCredentials: true }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ auth token
+          },
+          withCredentials: true, // ✅ include cookies if needed
+        }
       );
       console.log("✅ Successfully completed task");
     } catch (err) {
@@ -73,7 +80,6 @@ export default function WatchVideoClient() {
         poster={video.thumbnail}
         className="w-full max-w-3xl rounded-lg border h-68 shadow-lg"
         onEnded={handleVideoEnd}
-        
       />
 
       <p className="mt-3 text-green-400 font-semibold">

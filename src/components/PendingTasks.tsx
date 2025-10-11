@@ -24,6 +24,7 @@ export default function PendingTasks() {
   const userId = user?._id || user?.id;
 
   useEffect(() => {
+    const token=localStorage.getItem("token");
     const fetchPending = async () => {
       if (!userId) return;
       try {
@@ -33,7 +34,13 @@ export default function PendingTasks() {
         const dailyRes = await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/get-daily-task`,
           {},
-          { withCredentials: true }
+           {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // ✅ auth token
+            },
+            withCredentials: true, // ✅ include cookies if needed
+          }
         );
 
         const allTasks: VideoTask[] = Array.isArray(dailyRes.data.data)
@@ -44,7 +51,13 @@ export default function PendingTasks() {
         const completedRes = await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/get-completed-task/${userId}`,
           {},
-          { withCredentials: true }
+            {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // ✅ auth token
+            },
+            withCredentials: true, // ✅ include cookies if needed
+          }
         );
 
         const completedIds = new Set(

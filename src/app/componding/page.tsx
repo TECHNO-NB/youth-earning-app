@@ -106,7 +106,7 @@ export default function Page() {
 
                   <CardHeader>
                     <CardTitle className="text-lg font-semibold text-yellow-400">
-                      ₹{pkg.buy.toLocaleString()}
+                      Rs{pkg.buy.toLocaleString()}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2 text-sm text-gray-300">
@@ -116,12 +116,12 @@ export default function Page() {
                     </p>
                     <p>
                       <span className="text-gray-400">Daily Return:</span>{" "}
-                      <span className="font-medium text-green-400">₹{pkg.dailyReturn}</span>
+                      <span className="font-medium text-green-400">Rs{pkg.dailyReturn}</span>
                     </p>
                     <p>
                       <span className="text-gray-400">Total Return:</span>{" "}
                       <span className="font-medium text-blue-400">
-                        ₹{pkg.totalReturn.toLocaleString()}
+                        Rs{pkg.totalReturn.toLocaleString()}
                       </span>
                     </p>
                     <Button

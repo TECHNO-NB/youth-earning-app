@@ -23,9 +23,17 @@ export default function CompletedTasks() {
       if (!userId) return;
       try {
         setLoading(true);
+        const token=localStorage.getItem("token")
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/get-completed-task/${userId}`,
-          { withCredentials: true }
+          {},
+           {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // ✅ auth token
+            },
+            withCredentials: true, // ✅ include cookies if needed
+          }
         );
 
         setCompletedTasks(res.data?.data?.completedTasks || []);

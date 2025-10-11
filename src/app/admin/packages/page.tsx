@@ -25,7 +25,9 @@ type PackageType = {
 
 const AdminPackagesPage = () => {
   const [packages, setPackages] = useState<PackageType[]>([]);
-  const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(
+    null
+  );
   const [deletePackageId, setDeletePackageId] = useState<string | null>(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -35,8 +37,16 @@ const AdminPackagesPage = () => {
   const fetchPackages = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem("token");
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/get-packages`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/get-packages`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
       );
       setPackages(data.data);
     } catch (err: any) {
@@ -67,10 +77,20 @@ const AdminPackagesPage = () => {
   const confirmEdit = async (pkg: PackageType) => {
     try {
       if (pkg._id) {
+        const token = localStorage.getItem("token");
+
         await axios.put(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/update-packages/${pkg._id}`,
-          pkg
+          pkg, // ✅ your update data
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // ✅ auth token
+            },
+            withCredentials: true, // ✅ include cookies if needed
+          }
         );
+
         setPackages((prev) => prev.map((p) => (p._id === pkg._id ? pkg : p)));
       } else {
         const { data } = await axios.post(
@@ -89,9 +109,11 @@ const AdminPackagesPage = () => {
   return (
     <div className="p-6 bg-gray-950 min-h-screen text-gray-100 mt-10 md:mt-0">
       {/* Header - always visible */}
-      <ParticlesBackground/>
+      <ParticlesBackground />
       <div className="flex justify-between items-center mb-6 z-2">
-        <h1 className="md:text-3xl font-bold text-white">Packages Management</h1>
+        <h1 className="md:text-3xl font-bold text-white">
+          Packages Management
+        </h1>
         <Button
           className="flex items-center z-2 gap-2 bg-blue-600 hover:bg-blue-700 text-white"
           onClick={() => setAddModalOpen(true)}
@@ -157,12 +179,16 @@ const AdminPackagesPage = () => {
       )}
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={!!deletePackageId} onOpenChange={() => setDeletePackageId(null)}>
+      <Dialog
+        open={!!deletePackageId}
+        onOpenChange={() => setDeletePackageId(null)}
+      >
         <DialogContent className="sm:max-w-[400px] bg-gray-900 text-white border border-gray-700">
           <DialogHeader>
             <DialogTitle>Delete Package?</DialogTitle>
             <DialogDescription className="text-gray-400">
-              Are you sure you want to delete this package? This action cannot be undone.
+              Are you sure you want to delete this package? This action cannot
+              be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex justify-end gap-2">
@@ -219,12 +245,16 @@ type ModalProps = {
   onConfirm: (pkg: PackageType) => void;
 };
 
-const EditPackageModal: React.FC<ModalProps> = ({ pkg, onClose, onConfirm }) => {
+const EditPackageModal: React.FC<ModalProps> = ({
+  pkg,
+  onClose,
+  onConfirm,
+}) => {
   const [formData, setFormData] = useState<PackageType>({ ...pkg });
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm">
-      <ParticlesBackground/>
+      <ParticlesBackground />
       <div className="bg-gray-900 z-2 p-6 rounded-xl shadow-lg text-white w-96 border border-gray-700">
         <h2 className="text-lg font-bold mb-4 text-white">
           {pkg._id ? "Edit Package" : "Add Package"}
@@ -235,35 +265,45 @@ const EditPackageModal: React.FC<ModalProps> = ({ pkg, onClose, onConfirm }) => 
             className="w-full p-2 rounded bg-gray-800 text-white placeholder-gray-400 focus:ring focus:ring-blue-500"
             placeholder="Level"
             value={formData.level || ""}
-            onChange={(e) => setFormData({ ...formData, level: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, level: e.target.value })
+            }
           />
           <input
             className="w-full p-2 rounded bg-gray-800 text-white placeholder-gray-400 focus:ring focus:ring-blue-500"
             placeholder="Deposit"
             type="number"
             value={formData.deposit || ""}
-            onChange={(e) => setFormData({ ...formData, deposit: Number(e.target.value) })}
+            onChange={(e) =>
+              setFormData({ ...formData, deposit: Number(e.target.value) })
+            }
           />
           <input
             className="w-full p-2 rounded bg-gray-800 text-white placeholder-gray-400 focus:ring focus:ring-blue-500"
             placeholder="Per Task"
             type="number"
             value={formData.perTask || ""}
-            onChange={(e) => setFormData({ ...formData, perTask: Number(e.target.value) })}
+            onChange={(e) =>
+              setFormData({ ...formData, perTask: Number(e.target.value) })
+            }
           />
           <input
             className="w-full p-2 rounded bg-gray-800 text-white placeholder-gray-400 focus:ring focus:ring-blue-500"
             placeholder="Daily Task"
             type="number"
             value={formData.dailyTask || ""}
-            onChange={(e) => setFormData({ ...formData, dailyTask: Number(e.target.value) })}
+            onChange={(e) =>
+              setFormData({ ...formData, dailyTask: Number(e.target.value) })
+            }
           />
 
           <label className="flex items-center gap-2 mt-2 text-gray-300">
             <input
               type="checkbox"
               checked={formData.vip}
-              onChange={(e) => setFormData({ ...formData, vip: e.target.checked })}
+              onChange={(e) =>
+                setFormData({ ...formData, vip: e.target.checked })
+              }
             />
             VIP
           </label>
