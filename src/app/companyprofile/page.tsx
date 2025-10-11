@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import ParticlesBackground from "@/components/Background";
 
 const Page: React.FC = () => {
   const services = [
@@ -32,14 +33,15 @@ const Page: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white font-sans mb-10">
       {/* Hero Section */}
+      <ParticlesBackground/>
       <motion.section
-        className="relative w-full h-[40vh] flex flex-col items-center justify-center bg-gradient-to-r from-purple-800 via-indigo-900 to-black text-center px-6"
+        className="relative  w-full h-[40vh] flex flex-col items-center justify-center bg-gradient-to-r from-purple-800 via-indigo-900 to-black text-center px-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
         <motion.h1
-          className="text-5xl md:text-6xl font-extrabold mb-4 text-yellow-400"
+          className="text-5xl z-2 md:text-6xl font-extrabold mb-4 text-yellow-400"
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, delay: 0.3 }}
@@ -47,7 +49,7 @@ const Page: React.FC = () => {
           Youth Earning App
         </motion.h1>
         <motion.p
-          className="text-lg md:text-xl text-gray-200 max-w-2xl"
+          className="text-lg z-2 md:text-xl text-gray-200 max-w-2xl"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
@@ -64,10 +66,10 @@ const Page: React.FC = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-yellow-400 text-center">
+        <h2 className="text-3xl md:text-4xl z-2 font-bold mb-6 text-yellow-400 text-center">
           About Youth Earning App
         </h2>
-        <p className="text-gray-300 text-lg leading-relaxed text-center max-w-3xl mx-auto">
+        <p className="text-gray-300 z-2 text-lg leading-relaxed text-center max-w-3xl mx-auto">
           Youth Earning App is designed to help users earn money in multiple
           ways: automated compounding, package purchases, watching videos, spinning the lucky wheel, and referring friends. We empower young individuals to generate income conveniently and securely.
         </p>

@@ -20,6 +20,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { DollarSign, TrendingUp, Zap } from "lucide-react";
+import ParticlesBackground from "@/components/Background";
 
 // ---------------- DATA ----------------
 const LEVEL_PACKAGES = [
@@ -37,13 +38,13 @@ const LEVEL_PACKAGES = [
 const DAILY_RETURN_RATE = "3%";
 
 const COMPOUNDING_PACKAGES = [
-  { buy: 1500, duration: "120 days", dailyReturn: "₹45 / day", totalReturn: 5400 },
-  { buy: 4000, duration: "120 days", dailyReturn: "₹100 / day", totalReturn: 12000 },
-  { buy: 10000, duration: "120 days", dailyReturn: "₹170 / day", totalReturn: 22100 },
-  { buy: 30000, duration: "120 days", dailyReturn: "₹400 / day", totalReturn: 52100 },
-  { buy: 80000, duration: "120 days", dailyReturn: "₹850 / day", totalReturn: 110500 },
-  { buy: 150000, duration: "120 days", dailyReturn: "₹1500 / day", totalReturn: 195000 },
-  { buy: 400000, duration: "120 days", dailyReturn: "₹4000 / day", totalReturn: 520000 },
+  { buy: 1500, duration: "120 days", dailyReturn: "Rs 45 / day", totalReturn: 5400 },
+  { buy: 4000, duration: "120 days", dailyReturn: "Rs 100 / day", totalReturn: 12000 },
+  { buy: 10000, duration: "120 days", dailyReturn: "Rs 170 / day", totalReturn: 22100 },
+  { buy: 30000, duration: "120 days", dailyReturn: "Rs 400 / day", totalReturn: 52100 },
+  { buy: 80000, duration: "120 days", dailyReturn: "Rs 850 / day", totalReturn: 110500 },
+  { buy: 150000, duration: "120 days", dailyReturn: "Rs 1500 / day", totalReturn: 195000 },
+  { buy: 400000, duration: "120 days", dailyReturn: "Rs 4000 / day", totalReturn: 520000 },
 ];
 
 // ---------------- CARD COMPONENT ----------------
@@ -55,11 +56,13 @@ interface PackageProps {
 
 const PackageCard: React.FC<PackageProps> = ({ id, name, amount }) => (
   <motion.div
+  className=" z-2"
     initial={{ opacity: 0, y: 40 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.4, delay: id * 0.05 }}
   >
-    <Card className="bg-[#0f0f0f] border border-blue-500/20 hover:border-blue-500/50 hover:shadow-blue-500/20 transition-all duration-300 rounded-2xl shadow-lg backdrop-blur-xl">
+    
+    <Card className="bg-[#0f0f0f] z-2 border border-blue-500/20 hover:border-blue-500/50 hover:shadow-blue-500/20 transition-all duration-300 rounded-2xl shadow-lg backdrop-blur-xl">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-xl font-bold text-blue-400">
           {name} <span className="text-gray-400 text-sm">(Lvl {id})</span>
@@ -72,7 +75,7 @@ const PackageCard: React.FC<PackageProps> = ({ id, name, amount }) => (
 
       <CardContent className="space-y-4">
         <div className="text-4xl font-extrabold text-white">
-          ₹ {amount.toLocaleString("en-IN")}
+          Rs {amount.toLocaleString("en-IN")}
         </div>
 
         <div className="space-y-3 text-sm text-gray-400">
@@ -82,7 +85,7 @@ const PackageCard: React.FC<PackageProps> = ({ id, name, amount }) => (
               Min. Investment
             </span>
             <span className="font-semibold text-white">
-              ₹ {amount.toLocaleString("en-IN")}
+              Rs {amount.toLocaleString("en-IN")}
             </span>
           </div>
 
@@ -102,17 +105,19 @@ const PackageCard: React.FC<PackageProps> = ({ id, name, amount }) => (
 // ---------------- MAIN PAGE ----------------
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-black text-white py-12 px-6 mb-10">
+    <>
+    <ParticlesBackground/>
+    <div className="min-h-screen z-2 bg-black text-white py-12 px-6 mb-10">
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="mb-12 text-center"
       >
-        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
+        <h1 className="text-3xl z-2 md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
           Income Packages Overview
         </h1>
-        <p className="text-gray-400 mt-3 text-lg">
+        <p className="text-gray-400 z-4 mt-3 text-lg">
           Explore our levels and compounding investment opportunities.
         </p>
       </motion.header>
@@ -122,7 +127,7 @@ export default function DashboardPage() {
         <motion.h2
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-3xl font-bold mb-8 text-blue-400"
+          className="text-3xl z-4 relative font-bold mb-8 text-blue-400"
         >
           Package Levels (Y1 - Y10)
         </motion.h2>
@@ -133,7 +138,7 @@ export default function DashboardPage() {
           variants={{
             visible: { transition: { staggerChildren: 0.1 } },
           }}
-          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          className="grid  z-2 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
           {LEVEL_PACKAGES.map((pkg) => (
             <PackageCard key={pkg.id} {...pkg} />
@@ -161,7 +166,7 @@ export default function DashboardPage() {
         >
           <Table>
             <TableCaption className="text-gray-500 pt-4">
-              Compounding packages have a fixed 120-day duration.
+              Compounding packages have  z-2a fixed 120-day duration.
             </TableCaption>
             <TableHeader>
               <TableRow className="border-gray-700 hover:bg-transparent">
@@ -197,7 +202,9 @@ export default function DashboardPage() {
             </TableBody>
           </Table>
         </motion.div>
+      Rs 
       </section>
     </div>
+    </>
   );
 }

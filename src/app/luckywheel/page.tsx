@@ -2,11 +2,12 @@
 
 import React, { useMemo, useRef, useState } from "react";
 import { RefreshCw, Sparkles } from "lucide-react";
-import logo from "../../../public/yea-removebg-preview.png";
+import logo from "../../../public/logoyeapng.png";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import ParticlesBackground from "@/components/Background";
 
 
 type Prize = {
@@ -87,24 +88,25 @@ export default function LuckyWheel({
   };
 
   return (
-    <div className="flex flex-col items-center  min-h-[100vh] mb-14 bg-[#050505] text-white px-4 py-0 ">
-      <div className="w-full flex items-center justify-center mb-10">
+    <div className="flex flex-col items-center mb-16  min-h-[100vh]  bg-[#050505] text-white px-4 py-0 ">
+      <ParticlesBackground/>
+      <div className="w-full z-2 flex items-center justify-center mb-10">
         <Image
           src={logo}
-          className="flex  items-center justify-center "
+          className="flex z-2  mt-2 items-center justify-center "
           alt="logo"
-          height={80}
-          width={80}
+          height={50}
+          width={50}
         />
       </div>
-      <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-cyan-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">
+      <h1 className="text-3xl z-2 sm:text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-cyan-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">
         🎯 Lucky Wheel
       </h1>
 
-      <div className="relative" style={{ width: size, height: size }}>
+      <div className="relative z-50" style={{ width: size, height: size }}>
         {/* glow ring */}
         <div
-          className="absolute inset-0 rounded-full pointer-events-none"
+          className="absolute z-4 inset-0 rounded-full pointer-events-none"
           style={{
             boxShadow:
               "0 0 60px rgba(0,255,255,0.3), 0 0 90px rgba(255,0,255,0.2)",
@@ -114,7 +116,7 @@ export default function LuckyWheel({
         {/* wheel */}
         <div
           ref={wheelRef}
-          className="rounded-full border-3 overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.8)]"
+          className="rounded-full relative z-0 border-3 overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.8)]"
           style={{
             width: size,
             height: size,
@@ -199,7 +201,7 @@ export default function LuckyWheel({
       </div>
 
       {/* Buttons */}
-      <div className="flex flex-col sm:flex-row items-center gap-4 mt-8">
+      <div className="flex flex-col z-2 sm:flex-row items-center gap-4 mt-8">
         {user.package === "Y5" ? (
           <button
             onClick={spin}

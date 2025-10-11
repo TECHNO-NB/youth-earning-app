@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
-import logo from "../../public/yea-removebg-preview.png";
+import logo from "../../public/logoyeapng.png";
 import Image from 'next/image';
 import axios from 'axios';
 import ParticlesBackground from './Background';
@@ -56,7 +56,7 @@ const Register = () => {
                       backdrop-blur-md rounded-3xl shadow-2xl p-10 sm:p-12">
         {/* Logo */}
         <div className="text-center mb-0 flex items-center justify-center">
-          <Image src={logo} height={100} width={150} alt='logo' />
+          <Image src={logo} height={50} width={70} alt='logo' />
         </div>
 
         {/* Form */}

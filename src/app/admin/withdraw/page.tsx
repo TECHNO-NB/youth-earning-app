@@ -131,8 +131,8 @@ const WithdrawAdminPage = () => {
                       className="bg-zinc-900 border border-zinc-800 text-white"
                     >
                       <CardHeader>
-                        <CardTitle className="flex justify-between items-center">
-                          <span>₹{w.amount}</span>
+                        <CardTitle className="flex justify-between items-center z-2">
+                          <span>Rs {w.amount}</span>
                           <span
                             className={`text-xs px-2 py-1 rounded ${
                               w.status === "approved"

@@ -13,6 +13,7 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import ParticlesBackground from "@/components/Background";
 
 const RedeemPage = () => {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -90,25 +91,26 @@ const RedeemPage = () => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-4 py-10">
       {/* Title */}
-      <div className="mb-8 text-center">
+      <ParticlesBackground/>
+      <div className="mb-8 z-2 text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-blue-500">
           Withdraw Your Amount
         </h1>
-        <p className="text-gray-400 mt-2 text-sm">
+        <p className="text-gray-400 relative mt-2 z-2 text-sm">
           Upload your payment QR and enter the amount you wish to withdraw.
         </p>
 
-        <div className="flex items-center justify-center gap-2 mt-3 bg-red-900/20 border border-red-700 px-3 py-2 rounded-lg w-fit mx-auto">
+        <div className="flex relative z-2 items-center justify-center gap-2 mt-3 bg-red-900/20 border border-red-700 px-3 py-2 rounded-lg w-fit mx-auto">
           <TriangleAlert className="text-red-500" size={20} />
-          <p className="text-red-400 text-sm font-medium">
-            Make sure the amount is not less than ₹500 and not greater than
-            ₹33,000
+          <p className="text-red-400 text-sm z-2 font-medium">
+            Make sure the amount is not less than Rs 500 and not greater than
+            Rs 33,000
           </p>
         </div>
       </div>
 
       {/* Card Container */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 w-full max-w-md shadow-lg flex flex-col gap-6">
+      <div className="bg-zinc-900 relative border z-2 border-zinc-800 rounded-2xl p-6 w-full max-w-md shadow-lg flex flex-col gap-6">
         {/* Image Preview */}
         <div className="border-2 border-dashed border-zinc-600 rounded-lg overflow-hidden">
           <div className="flex flex-col gap-2 items-center justify-center h-56 text-gray-400">
@@ -148,7 +150,7 @@ const RedeemPage = () => {
         {/* Amount Input */}
         <div className="relative w-full">
           <p className="absolute -top-3 bg-zinc-900 left-4 px-2 rounded-xl text-sm text-gray-400">
-            Coin Amount
+             Amount
           </p>
           <input
             onChange={(e) => setAmount(Number(e.target.value))}

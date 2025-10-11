@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { Users, Clipboard, Gift, Activity } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import ParticlesBackground from "@/components/Background";
 
 const Page: React.FC = () => {
   const user = useSelector((state: any) => state.user);
@@ -31,7 +32,7 @@ const Page: React.FC = () => {
     },
     {
       title: "Total Earnings",
-      value: `₹${user.referralEarned || 0}`,
+      value: `Rs ${user.referralEarned || 0}`,
       icon: <Gift size={32} className="text-yellow-400" />,
     },
     {
@@ -43,6 +44,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6 md:p-10 mb-14">
+      <ParticlesBackground/>
       <Toaster position="top-right" />
 
       {/* Page Heading */}
@@ -50,19 +52,19 @@ const Page: React.FC = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-center mb-10"
+        className="text-center z-2 mb-10"
       >
-        <h1 className="text-4xl md:text-5xl font-bold text-yellow-400 mb-2">
+        <h1 className="text-4xl z-2 md:text-5xl font-bold text-yellow-400 mb-2">
           Add People & Earn
         </h1>
-        <p className="text-gray-400">
+        <p className="text-gray-400 z-2">
           Share your referral code and earn rewards for every user you add
         </p>
       </motion.div>
 
       {/* Stats Cards */}
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+        className="grid grid-cols-1 z-2 md:grid-cols-2 gap-8 max-w-4xl mx-auto"
         initial="hidden"
         animate="visible"
         variants={{
@@ -73,7 +75,7 @@ const Page: React.FC = () => {
         {stats.map((stat, i) => (
           <motion.div
             key={i}
-            className="bg-gray-800 rounded-2xl p-6 shadow-lg flex items-center justify-between hover:scale-105 transform transition-transform cursor-pointer"
+            className="bg-gray-800 z-2 rounded-2xl p-6 shadow-lg flex items-center justify-between hover:scale-105 transform transition-transform cursor-pointer"
             initial={{ y: 50, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}

@@ -25,7 +25,7 @@ const LayoutComp = ({
         {children}</main>
 
       {/* Bottom navigation */}
-    {path !== "/" && path !== "/register" && !path.startsWith("/admin") && <BottomTab />}
+    {path !== "/" && path !== "/register" && path !=="/changepassword" && !path.startsWith("/admin") && <BottomTab />}
 
       </Provider>
 

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
+import ParticlesBackground from "@/components/Background";
 
 const handbookSections = [
   {
@@ -49,11 +50,12 @@ const EmployeeHandbook: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row">
       {/* Sidebar */}
+      <ParticlesBackground/>
       <motion.div
         initial={{ x: -200, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full md:w-1/4 bg-gray-900 p-5 md:h-screen"
+        className="w-full z-2 md:w-1/4 bg-gray-900 p-5 md:h-screen"
       >
         <h1 className="text-2xl font-bold mb-6 text-yellow-400">
           Youth Earning App

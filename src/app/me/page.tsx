@@ -10,9 +10,8 @@ import { motion } from "framer-motion";
 import { addUser, userState } from "@/redux/userSlice";
 import toast from "react-hot-toast";
 
-
 const Me: React.FC = () => {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const userdata = useSelector((state: any) => state.user);
   const router = useRouter();
 
@@ -23,11 +22,14 @@ const Me: React.FC = () => {
 
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 200, damping: 25 } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 200, damping: 25 },
+    },
   };
 
-
-   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
   useEffect(() => {
     const handler = (e: any) => {
@@ -49,9 +51,9 @@ const Me: React.FC = () => {
     });
   };
 
-  const handleLogout=()=>{
+  const handleLogout = () => {
     const isConfirmed = confirm("Are you sure to logout?");
-    if(isConfirmed){
+    if (isConfirmed) {
       const initialState: userState = {
         id: "",
         phone: 0,
@@ -60,18 +62,22 @@ const Me: React.FC = () => {
         referralUsedCount: 0,
         totalAmount: 0,
         referralCode: "",
-        referralEarned:0,
-        dailyIncome:0,
-        compoundDays:0,
+        referralEarned: 0,
+        dailyIncome: 0,
+        compoundDays: 0,
         role: "",
-        };
-        dispatch(addUser(initialState));
-        router.push("/")
-        toast.success("Logout success")
+        fullName: "",
+        avatar: "",
+        bankAccount: 0,
+        esewaNumber: 0,
+      };
+      dispatch(addUser(initialState));
+      router.push("/");
+      toast.success("Logout success");
     }
-  }
+  };
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-6 sm:p-10 mb-10 relative">
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-6 sm:p-10 mb-14 relative">
       <ParticlesBackground />
 
       {/* User Card */}
@@ -82,16 +88,20 @@ const Me: React.FC = () => {
       >
         <div className="flex relative flex-col items-center">
           {/* Avatar */}
-          <Button onClick={handleLogout} className=" absolute -top-4 left-58 bg-red-600 cursor-pointer">Logout</Button>
+          <Button
+            onClick={handleLogout}
+            className=" absolute -top-4 left-58 bg-red-600 cursor-pointer"
+          >
+            Logout
+          </Button>
           <motion.div
             className="w-24 h-24  rounded-full overflow-hidden mb-4 border-4 border-purple-500"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
-            
             <Image
-              src={profilepic}
+              src={userdata?.avatar || profilepic}
               alt="User Avatar"
               width={96}
               height={96}
@@ -100,11 +110,11 @@ const Me: React.FC = () => {
           </motion.div>
 
           {/* Name and Info */}
-          <h2 className="text-2xl font-bold">User</h2>
+          <h2 className="text-2xl font-bold">{userdata?.fullName || "User"}</h2>
           <p className="text-gray-400">{userdata?.phone}</p>
           <div className="flex items-center space-x-4 mt-2">
             <span className="px-3 py-1 bg-purple-700 rounded-full text-sm font-semibold">
-              {userdata?.package }
+              {userdata?.package}
             </span>
             <span className="px-3 py-1 bg-gray-700 rounded-full text-sm font-medium">
               {userdata?.role}
@@ -114,9 +124,18 @@ const Me: React.FC = () => {
           {/* Total Deposit */}
           <p className="mt-4 text-lg font-semibold">
             Total Deposit:{" "}
-            <span className="text-green-400">₹{userdata?.depositeAmount || 0}</span>
+            <span className="text-green-400">
+              ₹{userdata?.depositeAmount || 0}
+            </span>
           </p>
-        {userdata?.role==="admin" ?  <Button  className="w-full bg-yellow-500 hover:bg-yellow-600 py-3 rounded-xl font-semibold" onClick={() => router.push("/admin/dashboard")} >GO to Admin Panel</Button> :null}
+          {userdata?.role === "admin" ? (
+            <Button
+              className="w-full bg-yellow-500 hover:bg-yellow-600 py-3 rounded-xl font-semibold"
+              onClick={() => router.push("/admin/dashboard")}
+            >
+              GO to Admin Panel
+            </Button>
+          ) : null}
         </div>
       </motion.div>
 
@@ -149,7 +168,11 @@ const Me: React.FC = () => {
 
         {/* Buttons */}
         {/* @ts-ignore */}
-        <motion.div className="flex justify-between space-x-4" variants={cardVariants}>
+        <motion.div
+          className="flex justify-between space-x-4"
+          // @ts-ignore
+          variants={cardVariants}
+        >
           <Button
             onClick={() => router.push("/deposit")}
             className="flex-1 bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-semibold"
@@ -163,19 +186,6 @@ const Me: React.FC = () => {
             Withdraw
           </Button>
         </motion.div>
-
-        {/* Download Button */}
-        {/* @ts-ignore */}
-        {/* <motion.div variants={cardVariants}>
-          <Button
-            className="w-full bg-yellow-500 hover:bg-yellow-600 py-3 rounded-xl font-semibold"
-            onClick={() => {
-             handleInstall()
-            }}
-          >
-            Download App (.apk)
-          </Button>
-        </motion.div> */}
       </motion.div>
 
       {/* Stats Cards */}
@@ -187,11 +197,31 @@ const Me: React.FC = () => {
       >
         <div className="grid grid-cols-2 gap-4 p-0">
           {[
-            { title: "Today's Income", value: userdata.dailyIncome || 0, color: "from-blue-700 via-blue-900 to-gray-800" },
-            { title: "Total Deposit", value: userdata.depositeAmount || 0, color: "from-green-700 via-green-900 to-gray-800" },
-            { title: "Commission Earned", value: userdata.referralEarned || 0, color: "from-pink-700 via-pink-900 to-gray-800" },
-            { title: "Wallet Balance", value: userdata.totalAmount || 0, color: "from-yellow-700 via-yellow-900 to-gray-800" },
-            { title: "Pending Withdrawal", value: userdata.totalAmount || 0, color: "from-indigo-700 via-indigo-900 to-gray-800" },
+            {
+              title: "Today's Income",
+              value: userdata.dailyIncome || 0,
+              color: "from-blue-700 via-blue-900 to-gray-800",
+            },
+            {
+              title: "Total Deposit",
+              value: userdata.depositeAmount || 0,
+              color: "from-green-700 via-green-900 to-gray-800",
+            },
+            {
+              title: "Commission Earned",
+              value: userdata.referralEarned || 0,
+              color: "from-pink-700 via-pink-900 to-gray-800",
+            },
+            {
+              title: "Wallet Balance",
+              value: userdata.totalAmount || 0,
+              color: "from-yellow-700 via-yellow-900 to-gray-800",
+            },
+            {
+              title: "Pending Withdrawal",
+              value: userdata.totalAmount || 0,
+              color: "from-indigo-700 via-indigo-900 to-gray-800",
+            },
           ].map((card, i) => (
             <motion.div
               key={i}
@@ -200,10 +230,23 @@ const Me: React.FC = () => {
               variants={cardVariants}
             >
               <p className="text-sm text-gray-300">{card.title}</p>
-              <p className="text-xl font-bold mt-2">{card.value} INR</p>
+              <p className="text-xl font-bold mt-2">{card.value} Rs</p>
             </motion.div>
           ))}
         </div>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md"
+      >
+        <Button
+          onClick={() => router.push("/profile-settings")}
+          className="w-full h-14 mb-6 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold rounded-2xl shadow-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300"
+        >
+          Profile Settings ⚙️
+        </Button>
       </motion.div>
     </div>
   );

@@ -12,6 +12,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import ParticlesBackground from "@/components/Background";
 
 type PackageType = {
   _id: string;
@@ -88,10 +89,11 @@ const AdminPackagesPage = () => {
   return (
     <div className="p-6 bg-gray-950 min-h-screen text-gray-100 mt-10 md:mt-0">
       {/* Header - always visible */}
-      <div className="flex justify-between items-center mb-6">
+      <ParticlesBackground/>
+      <div className="flex justify-between items-center mb-6 z-2">
         <h1 className="md:text-3xl font-bold text-white">Packages Management</h1>
         <Button
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+          className="flex items-center z-2 gap-2 bg-blue-600 hover:bg-blue-700 text-white"
           onClick={() => setAddModalOpen(true)}
         >
           <Plus size={18} /> Add Package
@@ -104,11 +106,11 @@ const AdminPackagesPage = () => {
           Loading packages...
         </div>
       ) : error ? (
-        <div className="flex justify-center items-center py-20 text-red-500">
+        <div className="flex justify-center items-center z-2 py-20 text-red-500">
           {error || "Failed to load packages."}
         </div>
       ) : packages.length === 0 ? (
-        <div className="flex flex-col items-center justify-center text-gray-400 py-20">
+        <div className="flex flex-col z-2 items-center justify-center text-gray-400 py-20">
           <PackageX size={50} className="mb-4 text-gray-500" />
           <p className="text-lg mb-4">No packages found</p>
           <Button
@@ -222,7 +224,8 @@ const EditPackageModal: React.FC<ModalProps> = ({ pkg, onClose, onConfirm }) => 
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm">
-      <div className="bg-gray-900 p-6 rounded-xl shadow-lg text-white w-96 border border-gray-700">
+      <ParticlesBackground/>
+      <div className="bg-gray-900 z-2 p-6 rounded-xl shadow-lg text-white w-96 border border-gray-700">
         <h2 className="text-lg font-bold mb-4 text-white">
           {pkg._id ? "Edit Package" : "Add Package"}
         </h2>

@@ -8,6 +8,7 @@ import PendingTasks from "@/components/PendingTasks";
 import CompletedTasks from "@/components/CompletedTasks";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
+import ParticlesBackground from "@/components/Background";
 
 export default function Page() {
   const router = useRouter();
@@ -15,7 +16,9 @@ export default function Page() {
   const user =useSelector((state:any)=> state.user)
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 md:p-8 mb-14">
+    <>
+    <ParticlesBackground/>
+    <div className="  min-h-screen bg-black text-white p-4 md:p-8 mb-14">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -44,7 +47,7 @@ export default function Page() {
         <Button
           onClick={() => setActiveTab("pending")}
           variant={activeTab === "pending" ? "default" : "outline"}
-          className={`flex-1 rounded-xl ${
+          className={`flex-1 z-2 rounded-xl ${
             activeTab === "pending"
               ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
               : "border-gray-700 text-gray-300 hover:bg-gray-800"
@@ -55,7 +58,7 @@ export default function Page() {
         <Button
           onClick={() => setActiveTab("completed")}
           variant={activeTab === "completed" ? "default" : "outline"}
-          className={`flex-1 rounded-xl ${
+          className={`flex-1 z-2 rounded-xl ${
             activeTab === "completed"
               ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
               : "border-gray-700 text-gray-300 hover:bg-gray-800"
@@ -80,6 +83,7 @@ export default function Page() {
           </motion.div>
         ) : (
           <motion.div
+          className="z-2"
             key="completed"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -91,5 +95,6 @@ export default function Page() {
         )}
       </AnimatePresence>
     </div>
+            </>
   );
 }

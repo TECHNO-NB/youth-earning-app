@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import logo from "../../public/yea-removebg-preview.png";
+import logo from "../../public/logoyeapng.png";
 import Image from "next/image";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -59,6 +59,10 @@ const Login = () => {
           dailyIncome: res.data.data.user.dailyIncome,
           compoundDays: res.data.data.user.compoundDays,
           role: res.data.data.user.role,
+          fullName:  "",
+          avatar:  "",
+          bankAccount: 0,
+          esewaNumber:0,
         };
         localStorage.setItem("token",res.data.data.token)
         dispatch(addUser(userData));
@@ -87,7 +91,7 @@ const Login = () => {
       >
         {/* Logo */}
         <div className="text-center mb-0 flex items-center justify-center">
-          <Image src={logo} height={100} width={150} alt="logo" />
+          <Image src={logo} height={50} width={70} alt="logo" />
         </div>
 
         {/* Form */}
@@ -144,9 +148,16 @@ const Login = () => {
 
           <p
             onClick={() => router.push("/register")}
-            className="text-center text-gray-400 hover:text-white cursor-pointer mt-4"
+            className="text-center text-gray-400 hover:text-white cursor-pointer mt-0"
           >
             Register
+          </p>
+
+            <p
+            onClick={() => router.push("/changepassword")}
+            className="text-center text-gray-400 hover:text-white cursor-pointer mt-4"
+          >
+            Change password
           </p>
         </form>
       </div>

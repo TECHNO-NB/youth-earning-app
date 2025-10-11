@@ -111,7 +111,7 @@ const AdminDepositPanel: React.FC = () => {
   return (
     <>
      <ParticlesBackground/>
-    <div className="p-6 min-h-screen bg-gray-950 text-gray-100 mt-12 md:mt-0 ">
+    <div className="p-6 min-h-screen z-2 bg-gray-950 text-gray-100 mt-12 md:mt-0 ">
       <h1 className="text-2xl font-bold mb-6 text-white z-4">
         Deposit Requests Admin Panel
       </h1>
@@ -139,7 +139,7 @@ const AdminDepositPanel: React.FC = () => {
           <Loader className="w-8 h-8 animate-spin text-blue-500" />
         </div>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto relative z-2">
           <table className="w-full table-auto border-collapse border border-gray-700 shadow-md rounded-xl bg-gray-900 text-gray-100">
             <thead>
               <tr className="bg-gray-800">

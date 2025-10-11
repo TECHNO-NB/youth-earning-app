@@ -19,6 +19,7 @@ import { motion } from "framer-motion";
 
 import bankqr from "../../../public/bankqr.jpg";
 import walletqr from "../../../public/walletqr.jpg";
+import ParticlesBackground from "@/components/Background";
 
 const Page: React.FC = () => {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -94,14 +95,14 @@ const Page: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#0e0e0e] text-white flex flex-col items-center justify-start p-4 md:p-10 gap-6 mb-14">
-      
+       <ParticlesBackground/>
       {/* Error Message */}
       {errorMsg && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="fixed top-24 md:top-16 flex gap-3 border border-gray-700 bg-[#1a1a1a] px-4 py-2 rounded-2xl z-50"
+          className="fixed  top-24 md:top-16 flex gap-3 border border-gray-700 bg-[#1a1a1a] px-4 py-2 rounded-2xl z-50"
         >
           <TriangleAlert color="red" size={20} />
           <h1 className="text-red-500">{errorMsg}</h1>
@@ -112,7 +113,7 @@ const Page: React.FC = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="flex gap-4 bg-[#1a1a1a] border border-gray-700 rounded-2xl p-3 w-full md:w-[40%] justify-center shadow-md"
+        className="flex gap-4 z-2 bg-[#1a1a1a] border border-gray-700 rounded-2xl p-3 w-full md:w-[40%] justify-center shadow-md"
       >
         <motion.button
           onClick={() => setQrType("wallet")}
@@ -120,7 +121,7 @@ const Page: React.FC = () => {
           className={`flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold transition-all ${
             qrType === "wallet"
               ? "bg-green-500 text-black"
-              : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              : "bg-gray-800  text-gray-300 hover:bg-gray-700"
           }`}
         >
           <Wallet size={18} /> Wallet QR
@@ -143,14 +144,14 @@ const Page: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full md:w-[40%] border border-gray-700 bg-[#1a1a1a] rounded-2xl p-5 shadow-md"
+        className="w-full z-2  md:w-[40%] border border-gray-700 bg-[#1a1a1a] rounded-2xl p-5 shadow-md"
       >
         <h1 className="font-semibold text-yellow-400 text-lg mb-2">
           Load Amount Using This {qrType === "wallet" ? "Wallet" : "Bank"} QR
         </h1>
         <div className="flex gap-3 items-center text-sm text-gray-300">
           <TriangleAlert color="red" size={20} />
-          <p>Make sure the amount is not less than INR 500.</p>
+          <p>Make sure the amount is not less than Rs 500.</p>
         </div>
       </motion.div>
 
@@ -159,7 +160,7 @@ const Page: React.FC = () => {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
-        className="w-full md:w-[40%] bg-[#1a1a1a] border border-gray-700 rounded-2xl p-4 flex flex-col items-center justify-center shadow-md"
+        className="w-full md:w-[40%] z-2 bg-[#1a1a1a] border border-gray-700 rounded-2xl p-4 flex flex-col items-center justify-center shadow-md"
       >
         <Image
           alt={`${qrType} QR`}
@@ -178,7 +179,7 @@ const Page: React.FC = () => {
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => window.open(currentQR.src, "_blank")}
-        className="w-full md:w-[40%] bg-red-600 hover:bg-red-700 transition-all py-3 rounded-xl flex items-center justify-center gap-2 font-semibold text-white shadow"
+        className="w-full z-2 md:w-[40%] bg-red-600 hover:bg-red-700 transition-all py-3 rounded-xl flex items-center justify-center gap-2 font-semibold text-white shadow"
       >
         <Download size={20} /> Download {qrType === "wallet" ? "Wallet" : "Bank"} QR
       </motion.button>
@@ -190,7 +191,7 @@ const Page: React.FC = () => {
         transition={{ delay: 0.1 }}
         className="w-full md:w-[40%] bg-[#1a1a1a] border border-gray-700 rounded-2xl p-6 flex flex-col gap-5 shadow-md"
       >
-        <div className="relative w-full">
+        <div className="relative w-full z-2">
           <label className="absolute -top-3.5 left-4 bg-[#1a1a1a] px-1 text-sm text-gray-300">
             Amount
           </label>
@@ -207,7 +208,7 @@ const Page: React.FC = () => {
           onClick={handleClick}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="cursor-pointer w-full border-2 border-dashed border-gray-600 rounded-xl p-6 flex flex-col items-center justify-center text-gray-400 hover:border-blue-500 hover:text-blue-400 transition"
+          className="cursor-pointer z-2 w-full border-2 border-dashed border-gray-600 rounded-xl p-6 flex flex-col items-center justify-center text-gray-400 hover:border-blue-500 hover:text-blue-400 transition"
         >
           {preview ? (
             <div className="mt-2 w-full">

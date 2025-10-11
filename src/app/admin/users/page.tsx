@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
 import axios from "axios";
-import Background from "@/components/AnimatedBg";
+
+import ParticlesBackground from "@/components/Background";
 
 type UserType = {
   _id: string;
@@ -80,28 +81,28 @@ const AdminUsersPage = () => {
 
   return (
     <div className="p-6 bg-gray-950 min-h-screen text-gray-100 mt-12">
-      <Background/>
-      <h1 className="text-3xl font-bold mb-6 text-white">All Users</h1>
+      <ParticlesBackground/>
+      <h1 className="text-3xl z-2 font-bold mb-6 text-white">All Users</h1>
 
       {/* Table */}
-      <div className="overflow-x-auto z bg-gray-950">
+      <div className="overflow-x-auto  relative z-2 bg-gray-950">
         <table className="min-w-full border border-gray-700 rounded">
-          <thead className="bg-gray-800 text-gray-200">
-            <tr>
-              <th className="p-3 border border-gray-700">Phone</th>
-              <th className="p-3 border border-gray-700">Referral Code</th>
-              <th className="p-3 border border-gray-700">Used</th>
-              <th className="p-3 border border-gray-700">Total</th>
-              <th className="p-3 border border-gray-700">Deposit</th>
-              <th className="p-3 border border-gray-700">Role</th>
-              <th className="p-3 border border-gray-700">Package</th>
-              <th className="p-3 border border-gray-700">Actions</th>
+          <thead className="bg-gray-800 text-gray-200 z-2">
+            <tr className=" relative z-2">
+              <th className="p-3 z-2 border border-gray-700">Phone</th>
+              <th className="p-3 z-2 border border-gray-700">Referral Code</th>
+              <th className="p-3 z-2 border border-gray-700">Used</th>
+              <th className="p-3 z-2 border border-gray-700">Total</th>
+              <th className="p-3 z-2 border border-gray-700">Deposit</th>
+              <th className="p-3 z-2 border border-gray-700">Role</th>
+              <th className="p-3 z-2 border border-gray-700">Package</th>
+              <th className="p-3 z-2 border border-gray-700">Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={8} className="p-6 text-center text-gray-400">
+                <td colSpan={8} className="p-6 z-2 text-center text-gray-400">
                   Loading users...
                 </td>
               </tr>

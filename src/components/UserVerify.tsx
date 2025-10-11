@@ -3,7 +3,7 @@
 import { addUser, userState } from "@/redux/userSlice";
 import axios from "axios";
 import { Loader } from "lucide-react";
-import { headers } from "next/headers";
+
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,6 +46,10 @@ export default function VerifyUser() {
               dailyIncome: res.data.data.dailyIncome,
               compoundDays: res.data.data.compoundDays,
               role: res.data.data.role,
+              fullName: res.data.data.fullName || "",
+              avatar: res.data.data.avatar || "",
+              bankAccount: res.data.data.bankAccount || 0,
+              esewaNumber: res.data.data.esewaNumber || 0,
             };
             dispatch(addUser(userData));
             toast.success(`Welcome back`);

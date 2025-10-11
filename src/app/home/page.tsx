@@ -14,12 +14,13 @@ import {
   PiggyBank,
   Headphones,
 } from "lucide-react";
-import logo from "../../../public/yea-removebg-preview.png";
+import logo from "../../../public/logoyeapng.png";
 import earnapp1 from "../../../public/earnapp1.webp";
 import earnapp2 from "../../../public/earnapp2.webp";
 import vip from "../../../public/vip.png";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import ParticlesBackground from "@/components/Background";
 
 const images = [earnapp1, earnapp2, vip, earnapp1];
 
@@ -73,23 +74,24 @@ const Page = () => {
     { title: "Company Positions", icon: <Building2 />, gradient: "from-indigo-400 to-indigo-600",link:"/companypostions" },
     { title: "Spin Wheel", icon: <Gift />, gradient: "from-red-400 to-red-600", link: "/luckywheel" },
     { title: "Compounding", icon: <PiggyBank />, gradient: "from-orange-400 to-orange-600", link: "/componding" },
-    { title: "Customer Service", icon: <Headphones />, gradient: "from-cyan-400 to-cyan-600" ,  link: "https://wa.me/9779764821848?text=Hello,%20I%20need%20assistance"},
+    { title: "Customer Service", icon: <Headphones />, gradient: "from-cyan-400 to-cyan-600" ,  link: "/customer-service"},
   ];
 
   return (
     <div className="bg-black min-h-screen p-4 text-white mb-16">
+      <ParticlesBackground/>
       {/* Logo */}
       <motion.div
-        className="w-full flex items-center justify-center mb-6"
+        className="w-full flex items-center justify-center mb-6 z-2"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Image src={logo} alt="logo" height={80} width={80} />
+        <Image src={logo} alt="logo" height={70} width={70} />
       </motion.div>
 
       {/* Slider */}
-      <div className="relative w-full h-64 overflow-hidden rounded-xl mb-8">
+      <div className="relative w-full h-64 overflow-hidden rounded-xl mb-8 z-2">
         <motion.div
           className="flex w-full h-full"
           animate={{ x: `-${currentIndex * 100}%` }}
@@ -110,15 +112,15 @@ const Page = () => {
 
       {/* Task Hall */}
       <motion.div
-        className="flex justify-between px-3 border-b-2 mb-4"
+        className="flex justify-between px-3 border-b-2 mb-4 z-2"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
-        <h2 className="text-xl font-bold mb-2">Task Hall</h2>
+        <h2 className="text-xl z-2 font-bold mb-2">Task Hall</h2>
         <h2
           onClick={() => router.push("/task")}
-          className="text-xl font-bold mb-2 flex items-center cursor-pointer hover:text-blue-400"
+          className="text-xl font-bold mb-2 z-2 flex items-center cursor-pointer hover:text-blue-400"
         >
           {user.package} <ChevronRight />
         </h2>
@@ -126,12 +128,12 @@ const Page = () => {
 
       {/* Video Cards */}
       {loading ? (
-        <p className="text-center text-gray-400">Loading videos...</p>
+        <p className="text-center text-gray-400 z-2">Loading videos...</p>
       ) : videos.length === 0 ? (
-        <p className="text-center text-gray-400">No videos found</p>
+        <p className="text-center text-gray-400 z-4">No videos found</p>
       ) : (
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-4"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 z-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
@@ -140,11 +142,11 @@ const Page = () => {
             <motion.div
               key={video._id}
               onClick={() => router.push("/task")}
-              className="bg-gray-800 rounded-xl overflow-hidden shadow-lg cursor-pointer"
+              className="bg-gray-800 rounded-xl z-2 overflow-hidden shadow-lg cursor-pointer"
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="relative w-full h-40">
+              <div className="relative w-full h-40 z-2">
                 <Image src={video.thumbnail} alt={video.title} fill className="object-cover" />
               </div>
               <div className="p-4 text-center">
@@ -158,18 +160,18 @@ const Page = () => {
 
       {/* Services */}
       <motion.div
-        className="mt-8"
+        className="mt-8 z-2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
       >
         <h2 className="text-xl font-semibold mb-4 border-b pb-2">Services</h2>
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
+        <div className="grid z-2 grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
           {otherFeatures.map((val, i) => (
             <motion.div
               onClick={() => val.link && router.push(val.link)}
               key={i}
-              className="flex flex-col items-center justify-center bg-gray-900 p-4 rounded-2xl shadow-md cursor-pointer hover:bg-gray-800 transition-all duration-300"
+              className="flex flex-col z-2 items-center justify-center bg-gray-900 p-4 rounded-2xl shadow-md cursor-pointer hover:bg-gray-800 transition-all duration-300"
               whileHover={{ scale: 1.1 }}
               transition={{ type: "spring", stiffness: 300 }}
             >

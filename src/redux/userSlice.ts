@@ -9,10 +9,14 @@ export interface userState {
   totalAmount: number;
   referralCode: string;
   role: string;
-  referralEarned:0;
-  dailyIncome:0;
-  compoundDays:0;
-  token?: string; // Optional field
+  referralEarned: number;
+  dailyIncome: number;
+  compoundDays: number;
+  fullName: string;
+  avatar: string;
+  bankAccount: number;
+  esewaNumber: number;
+  token?: string; 
 }
 
 const initialState: userState = {
@@ -23,11 +27,14 @@ const initialState: userState = {
   referralUsedCount: 0,
   totalAmount: 0,
   referralCode: "",
-  referralEarned:0,
-  dailyIncome:0,
-  compoundDays:0,
+  referralEarned: 0,
+  dailyIncome: 0,
+  compoundDays: 0,
+  fullName: "",
+  avatar: "",
+  bankAccount: 0,
+  esewaNumber: 0,
   role: "",
-  
 };
 
 const userSlice = createSlice({
@@ -45,9 +52,9 @@ const userSlice = createSlice({
       state.totalAmount = action.payload.totalAmount;
       state.referralCode = action.payload.referralCode;
       state.role = action.payload.role;
-      state.referralEarned=action.payload.referralEarned;
-      state.dailyIncome=action.payload.dailyIncome;
-      state.compoundDays=action.payload.compoundDays;
+      state.referralEarned = action.payload.referralEarned;
+      state.dailyIncome = action.payload.dailyIncome;
+      state.compoundDays = action.payload.compoundDays;
 
       // Alternatively, to replace the whole state with the payload, you can use:
       // return action.payload;
