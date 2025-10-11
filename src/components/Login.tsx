@@ -60,6 +60,7 @@ const Login = () => {
           compoundDays: res.data.data.user.compoundDays,
           role: res.data.data.user.role,
         };
+        localStorage.setItem("token",res.data.data.token)
         dispatch(addUser(userData));
          
         router.push("/home");
