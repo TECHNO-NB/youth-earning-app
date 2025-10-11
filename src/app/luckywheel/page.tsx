@@ -8,7 +8,8 @@ import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import ParticlesBackground from "@/components/Background";
-
+import axios from "axios";
+import toast from "react-hot-toast";
 
 type Prize = {
   id: number;
@@ -17,14 +18,14 @@ type Prize = {
 };
 
 const defaultPrizes: Prize[] = [
-  { id: 0, label: "10 INR" },
-  { id: 1, label: "50 INR" },
-  { id: 2, label: "100 INR" },
-  { id: 3, label: "200 INR" },
-  { id: 4, label: "300 INR" },
-  { id: 5, label: "500 INR" },
+  { id: 0, label: "10 Rs" },
+  { id: 1, label: "50 Rs" },
+  { id: 2, label: "100 Rs" },
+  { id: 3, label: "200 Rs" },
+  { id: 4, label: "300 Rs" },
+  { id: 5, label: "500 Rs" },
   { id: 6, label: "Thanks" },
-  { id: 7, label: "1000 INR" },
+  { id: 7, label: "1000 Rs" },
 ];
 
 export default function LuckyWheel({
@@ -39,25 +40,33 @@ export default function LuckyWheel({
   const [angle, setAngle] = useState(0);
   const wheelRef = useRef<HTMLDivElement | null>(null);
   const user = useSelector((state: any) => state.user);
-  const router=useRouter();
+  const router = useRouter();
 
   const segments = useMemo(() => prizes.length, [prizes.length]);
   const segmentAngle = 360 / segments;
 
-  // bright and vibrant color palette
   const brightColors = [
-    "#FF4D4D", // bright red
-    "#FFD93D", // yellow
-    "#4DFF4D", // neon green
-    "#4DB8FF", // sky blue
-    "#FF66CC", // pink
-    "#FF914D", // orange
-    "#AA66FF", // purple
-    "#00FFFF", // cyan
+    "#FF4D4D",
+    "#FFD93D",
+    "#4DFF4D",
+    "#4DB8FF",
+    "#FF66CC",
+    "#FF914D",
+    "#AA66FF",
+    "#00FFFF",
   ];
 
-  const spin = () => {
+  const spin = async () => {
     if (spinning) return;
+
+    // 1-spin-per-day check
+    const lastSpin = localStorage.getItem("lastSpinDate");
+    const today = new Date().toDateString();
+    if (lastSpin === today) {
+      toast.error("You can only spin once per day!");
+      return;
+    }
+
     setSpinning(true);
     setResult(null);
 
@@ -72,9 +81,40 @@ export default function LuckyWheel({
     setAngle((prev) => prev + finalAngle);
 
     const duration = 6000;
-    setTimeout(() => {
+    setTimeout(async () => {
       setSpinning(false);
-      setResult(prizes[winningIndex]);
+      const prizeWon = prizes[winningIndex];
+      setResult(prizeWon);
+
+      // Save today's spin
+      localStorage.setItem("lastSpinDate", today);
+
+      // Call API to update user balance
+      if (prizeWon.label !== "Thanks") {
+        try {
+          const token = localStorage.getItem("token");
+          await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/win-balance`,
+            {
+              userId: user.id,
+              amount: parseInt(prizeWon.label), // assumes label is like "100 Rs"
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              withCredentials: true,
+            }
+          );
+
+          toast.success(
+            `Your balance has been updated with ${prizeWon.label}!`
+          );
+        } catch (err) {
+          console.error("Error updating balance:", err);
+        }
+      }
     }, duration + 100);
   };
 
@@ -88,16 +128,10 @@ export default function LuckyWheel({
   };
 
   return (
-    <div className="flex flex-col items-center mb-16  min-h-[100vh]  bg-[#050505] text-white px-4 py-0 ">
-      <ParticlesBackground/>
+    <div className="flex flex-col items-center mb-16 min-h-[100vh] bg-[#050505] text-white px-4 py-0">
+      <ParticlesBackground />
       <div className="w-full z-2 flex items-center justify-center mb-10">
-        <Image
-          src={logo}
-          className="flex z-2  mt-2 items-center justify-center "
-          alt="logo"
-          height={50}
-          width={50}
-        />
+        <Image src={logo} alt="logo" height={50} width={50} />
       </div>
       <h1 className="text-3xl z-2 sm:text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-cyan-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">
         🎯 Lucky Wheel
@@ -202,7 +236,7 @@ export default function LuckyWheel({
 
       {/* Buttons */}
       <div className="flex flex-col z-2 sm:flex-row items-center gap-4 mt-8">
-        {user.package === "Y5" ? (
+        {["Y5", "Y6", "Y7", "Y8", "Y9", "Y10"].includes(user.package) ? (
           <button
             onClick={spin}
             disabled={spinning}

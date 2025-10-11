@@ -63,8 +63,16 @@ const AdminPackagesPage = () => {
   // Delete package
   const confirmDelete = async () => {
     try {
+      const token = localStorage.get("token");
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/delete-packages/${deletePackageId}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/delete-packages/${deletePackageId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ auth token
+          },
+          withCredentials: true, // ✅ include cookies if needed
+        }
       );
       setPackages((prev) => prev.filter((pkg) => pkg._id !== deletePackageId));
       setDeletePackageId(null);
@@ -93,9 +101,17 @@ const AdminPackagesPage = () => {
 
         setPackages((prev) => prev.map((p) => (p._id === pkg._id ? pkg : p)));
       } else {
+        const token = localStorage.get("token");
         const { data } = await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/add-packages`,
-          pkg
+          pkg,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // ✅ auth token
+            },
+            withCredentials: true, // ✅ include cookies if needed
+          }
         );
         setPackages((prev) => [...prev, data]);
       }
