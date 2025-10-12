@@ -33,11 +33,11 @@ const AdminPackagesPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch packages from server
+  // ✅ Fetch packages
   const fetchPackages = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token"); // ✅ fixed .getItem()
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/get-packages`,
         {
@@ -60,95 +60,100 @@ const AdminPackagesPage = () => {
     fetchPackages();
   }, []);
 
-  // Delete package
+  // ✅ Delete package
   const confirmDelete = async () => {
     try {
-      const token = localStorage.get("token");
+      const token = localStorage.getItem("token"); // ❌ fixed .get() → ✅ .getItem()
       await axios.delete(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/delete-packages/${deletePackageId}`,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // ✅ auth token
+            Authorization: `Bearer ${token}`,
           },
-          withCredentials: true, // ✅ include cookies if needed
+          withCredentials: true,
         }
       );
+
       setPackages((prev) => prev.filter((pkg) => pkg._id !== deletePackageId));
       setDeletePackageId(null);
     } catch (err) {
-      console.error(err);
+      console.error("Delete failed:", err);
     }
   };
 
-  // Edit/Add package
+  // ✅ Edit/Add package
   const confirmEdit = async (pkg: PackageType) => {
     try {
-      if (pkg._id) {
-        const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
+      if (pkg._id) {
+        // Update existing package
         await axios.put(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/update-packages/${pkg._id}`,
-          pkg, // ✅ your update data
+          pkg,
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // ✅ auth token
+              Authorization: `Bearer ${token}`,
             },
-            withCredentials: true, // ✅ include cookies if needed
+            withCredentials: true,
           }
         );
 
         setPackages((prev) => prev.map((p) => (p._id === pkg._id ? pkg : p)));
       } else {
-        const token = localStorage.get("token");
+        // Add new package
         const { data } = await axios.post(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/add-packages`,
           pkg,
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // ✅ auth token
+              Authorization: `Bearer ${token}`,
             },
-            withCredentials: true, // ✅ include cookies if needed
+            withCredentials: true,
           }
         );
-        setPackages((prev) => [...prev, data]);
+
+        // ✅ fix: append new data.data not data directly
+        setPackages((prev) => [...prev, data.data]);
       }
+
       setSelectedPackage(null);
       setAddModalOpen(false);
     } catch (err) {
-      console.error(err);
+      console.error("Edit/Add failed:", err);
     }
   };
 
   return (
-    <div className="p-6 bg-gray-950 min-h-screen text-gray-100 mt-10 md:mt-0">
-      {/* Header - always visible */}
+    <div className="p-6 bg-gray-950 min-h-screen text-gray-100 mt-10 md:mt-0 relative">
       <ParticlesBackground />
-      <div className="flex justify-between items-center mb-6 z-2">
+
+      <div className="flex justify-between items-center mb-6 relative z-10">
         <h1 className="md:text-3xl font-bold text-white">
           Packages Management
         </h1>
         <Button
-          className="flex items-center z-2 gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
           onClick={() => setAddModalOpen(true)}
         >
           <Plus size={18} /> Add Package
         </Button>
       </div>
 
-      {/* Body */}
+      {/* ✅ Main body */}
       {loading ? (
         <div className="flex justify-center items-center py-20 text-gray-400">
           Loading packages...
         </div>
       ) : error ? (
-        <div className="flex justify-center items-center z-2 py-20 text-red-500">
-          {error || "Failed to load packages."}
+        <div className="flex justify-center items-center py-20 text-red-500">
+          {error}
         </div>
       ) : packages.length === 0 ? (
-        <div className="flex flex-col z-2 items-center justify-center text-gray-400 py-20">
+        <div className="flex flex-col items-center justify-center text-gray-400 py-20">
           <PackageX size={50} className="mb-4 text-gray-500" />
           <p className="text-lg mb-4">No packages found</p>
           <Button
@@ -159,7 +164,7 @@ const AdminPackagesPage = () => {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
           {packages.map((pkg) => (
             <div
               key={pkg._id}
@@ -194,11 +199,8 @@ const AdminPackagesPage = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog
-        open={!!deletePackageId}
-        onOpenChange={() => setDeletePackageId(null)}
-      >
+      {/* ✅ Delete Confirmation */}
+      <Dialog open={!!deletePackageId} onOpenChange={() => setDeletePackageId(null)}>
         <DialogContent className="sm:max-w-[400px] bg-gray-900 text-white border border-gray-700">
           <DialogHeader>
             <DialogTitle>Delete Package?</DialogTitle>
@@ -226,7 +228,7 @@ const AdminPackagesPage = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Edit/Add Modal */}
+      {/* ✅ Edit/Add Modal */}
       {(selectedPackage || addModalOpen) && (
         <EditPackageModal
           pkg={
@@ -271,7 +273,7 @@ const EditPackageModal: React.FC<ModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm">
       <ParticlesBackground />
-      <div className="bg-gray-900 z-2 p-6 rounded-xl shadow-lg text-white w-96 border border-gray-700">
+      <div className="bg-gray-900 p-6 rounded-xl shadow-lg text-white w-96 border border-gray-700 relative z-10">
         <h2 className="text-lg font-bold mb-4 text-white">
           {pkg._id ? "Edit Package" : "Add Package"}
         </h2>
