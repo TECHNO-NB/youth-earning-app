@@ -19,10 +19,12 @@ const ProfileSettings: React.FC = () => {
   const userdata = useSelector((state: any) => state.user);
 
   const [formData, setFormData] = useState({
+    id:userdata?.id || "",
     fullName: userdata?.fullName || "",
     avatar: userdata?.avatar || "",
     bankAccount: userdata?.bankAccount || "",
     esewaNumber: userdata?.esewaNumber || "",
+
   });
 
   const [preview, setPreview] = useState<string>(
