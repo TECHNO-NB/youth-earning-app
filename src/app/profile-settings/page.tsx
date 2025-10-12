@@ -19,7 +19,6 @@ const ProfileSettings: React.FC = () => {
   const userdata = useSelector((state: any) => state.user);
 
   const [formData, setFormData] = useState({
-    id: userdata.id || "",
     fullName: userdata?.fullName || "",
     avatar: userdata?.avatar || "",
     bankAccount: userdata?.bankAccount || "",
@@ -30,6 +29,7 @@ const ProfileSettings: React.FC = () => {
     formData.avatar || (defaultAvatar as unknown as string)
   );
 
+  // Handle file input change
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -42,45 +42,47 @@ const ProfileSettings: React.FC = () => {
     }
   };
 
+  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ Save profile
+  // Save profile
   const handleSave = async () => {
     try {
       axios.defaults.withCredentials = true;
-      const token=localStorage.getItem("token")
+      const token = localStorage.getItem("token");
+
+      // Only include changed fields in the payload
+      const payload: any = {};
+      Object.keys(formData).forEach((key) => {
+        if (formData[key as keyof typeof formData] !== userdata[key]) {
+          payload[key] = formData[key as keyof typeof formData];
+        }
+      });
+
+      if (Object.keys(payload).length === 0) {
+        toast("No changes to save");
+        return;
+      }
+
       const res = await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/update-profile`,
-        formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`, // ✅ auth token
-            },
-            withCredentials: true, // ✅ include cookies if needed
-          }
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
       );
 
       if (res.data.success) {
         const userDataNew: userState = {
-          id: res.data.data._id,
-          phone: res.data.data.phone,
-          package: res.data.data.package,
-          depositeAmount: res.data.data.depositeAmount,
-          referralUsedCount: res.data.data.referralUsedCount,
-          totalAmount: res.data.data.totalAmount,
-          referralCode: res.data.data.referralCode,
-          referralEarned: res.data.data.referralEarned,
-          dailyIncome: res.data.data.dailyIncome,
-          compoundDays: res.data.data.compoundDays,
-          role: res.data.data.role,
-          fullName: res.data.data.fullName || "",
-          avatar: res.data.data.avatar || "",
-          bankAccount: res.data.data.bankAccount || 0,
-          esewaNumber: res.data.data.esewaNumber || 0,
+          ...userdata,
+          ...res.data.data, // merge only changed fields
         };
         dispatch(addUser(userDataNew));
         toast.success("Profile updated successfully!");
@@ -96,6 +98,7 @@ const ProfileSettings: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center py-10 px-4">
       <ParticlesBackground />
+
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
