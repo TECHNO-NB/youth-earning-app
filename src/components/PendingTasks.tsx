@@ -82,7 +82,7 @@ export default function PendingTasks() {
   };
 
   return (
-    <div className="min-h-screen z-2 bg-black text-white p-6 md:p-10">
+    <div className="min-h-screen relative z-10 bg-black text-white p-6 md:p-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {loading ? (
           <p className="col-span-full text-center text-gray-400">Loading...</p>
