@@ -87,6 +87,7 @@ const ProfileSettings: React.FC = () => {
           ...res.data.data, // merge only changed fields
         };
         dispatch(addUser(userDataNew));
+        router.push("/me")
         toast.success("Profile updated successfully!");
       } else {
         toast.error(res.data.message || "Update failed!");

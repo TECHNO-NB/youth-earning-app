@@ -30,7 +30,7 @@ const tabs = [
   },
 ];
 
-const whatsappBase = "https://wa.me/9779764821848?text=";
+const whatsappBase = "https://wa.me/9779700164201?text=";
 
 const CustomerSupport: React.FC = () => {
   const router = useRouter();
